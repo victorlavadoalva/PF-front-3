@@ -2,9 +2,9 @@ import FacebookIcon from "@mui/icons-material/Facebook";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import TwitterIcon from "@mui/icons-material/Twitter";
+import { useNavigate } from "react-router";
 import { useLocation } from "react-router-dom";
 import styles from "./styles.module.css";
-import { useNavigate } from "react-router";
 
 export default function Footer() {
   const handleFacebookClick = () => {
@@ -23,7 +23,6 @@ export default function Footer() {
   const location = useLocation();
   const navigate = useNavigate();
 
-
   return (
     <footer
       className={
@@ -36,10 +35,14 @@ export default function Footer() {
             <h4>FoodBook</h4>
             <ul>
               <li>
-                <a href="#" onClick={() => navigate(`home/aboutUs`)}>Acerca de nosotros</a>
+                <a href="#" onClick={() => navigate(`home/aboutUs`)}>
+                  Acerca de nosotros
+                </a>
               </li>
               <li>
-                <a href="#" onClick={() => navigate(`home/developers`)}>Nuestros Desarrolladores</a>
+                <a href="#" onClick={() => navigate(`home/developers`)}>
+                  Nuestros Desarrolladores
+                </a>
               </li>
             </ul>
           </div>
@@ -50,7 +53,9 @@ export default function Footer() {
                 <a href="#">FAQ</a>
               </li>
               <li>
-                <a href="http://localhost:3000/home/cart">Carrito</a>
+                <a href="https://pf-front-3-production.up.railway.app/home/cart">
+                  Carrito
+                </a>
               </li>
             </ul>
           </div>
@@ -58,10 +63,12 @@ export default function Footer() {
             <h4>Compra en linea</h4>
             <ul>
               <li>
-                <a href="http://localhost:3000/home">Restaurantes</a>
+                <a href="https://pf-front-3-production.up.railway.app/home">
+                  Restaurantes
+                </a>
               </li>
               <li>
-                <a href="http://localhost:3000/mapa">
+                <a href="https://pf-front-3-production.up.railway.app/mapa">
                   Ubicaciones de Restaurantes
                 </a>
               </li>

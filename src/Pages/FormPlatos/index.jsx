@@ -1,37 +1,36 @@
-import React, { useState } from "react";
-import { Formik } from 'formik';
-import styles from './styles.module.css';
 import axios from "axios";
+import { Formik } from "formik";
+import React, { useState } from "react";
+import styles from "./styles.module.css";
 
 export default function FormPlatos() {
   const [formSubmit, setformSubmit] = useState(false);
-  const [imageFile, setImageFile] = useState([])
-  const restDataString = localStorage.getItem('UserLogVerificate');
+  const [imageFile, setImageFile] = useState([]);
+  const restDataString = localStorage.getItem("UserLogVerificate");
   const id = JSON.parse(restDataString)?.id;
   const token = JSON.parse(restDataString)?.token;
 
   console.log("id", id);
-  console.log("token", token)
+  console.log("token", token);
   // console.log(restDataString)
   // console.log('hola')
 
   function handleImage(files) {
-    const selectFiles = Array.from(files).slice(0,1);
-    setImageFile(selectFiles)
+    const selectFiles = Array.from(files).slice(0, 1);
+    setImageFile(selectFiles);
   }
 
   return (
     <>
       <Formik
         initialValues={{
-          name: '',
-          description: '',
-          ingredients: '',
-          tags: '',
-          cost: '',
-          type: '',
-          image: null
-
+          name: "",
+          description: "",
+          ingredients: "",
+          tags: "",
+          cost: "",
+          type: "",
+          image: null,
         }}
         validate={(valores) => {
           let errors = {};
@@ -39,25 +38,27 @@ export default function FormPlatos() {
           if (!valores.name) {
             errors.name = "Ingrese un nombre";
           } else if (!/^[a-zA-ZÀ-ÿ\s]{1,40}$/.test(valores.name)) {
-            errors.name = 'El nombre solo puede contener letras y espacios';
+            errors.name = "El nombre solo puede contener letras y espacios";
           }
 
           if (!valores.description) {
             errors.description = "Ingrese una descripción";
           } else if (!/^[\w\s\d.,:]+$/u.test(valores.description)) {
-            errors.description = "La descripción solo puede contener letras, números, espacios y los caracteres . , :";
+            errors.description =
+              "La descripción solo puede contener letras, números, espacios y los caracteres . , :";
           }
 
           if (!valores.ingredients) {
             errors.ingredients = "Ingrese los ingredientes";
           } else if (!/^[\w\s\d.,:]+$/u.test(valores.ingredients)) {
-            errors.ingredients = "Los ingredientes solo pueden contener letras, números, espacios y los caracteres . , :";
+            errors.ingredients =
+              "Los ingredientes solo pueden contener letras, números, espacios y los caracteres . , :";
           }
 
           if (!valores.tags) {
             errors.tags = "Ingrese los tags";
           } else if (!/^[a-zA-ZÀ-ÿ\s]{1,40}$/.test(valores.tags)) {
-            errors.tags = 'Los tags solo pueden contener letras y espacios';
+            errors.tags = "Los tags solo pueden contener letras y espacios";
           }
 
           if (!valores.cost) {
@@ -69,94 +70,115 @@ export default function FormPlatos() {
           if (!valores.type) {
             errors.type = "Ingrese un tipo";
           } else if (!/^[a-zA-ZÀ-ÿ\s]{1,40}$/.test(valores.type)) {
-            errors.type = 'El tipo solo puede contener letras y espacios';
+            errors.type = "El tipo solo puede contener letras y espacios";
           }
           return errors;
         }}
         onSubmit={(valores, { resetForm }) => {
           const formData = new FormData();
-          formData.append('name', valores.name);
-          formData.append('description', valores.description);
-          formData.append('ingredients', valores.ingredients);
-          formData.append('tags', valores.tags);
-          formData.append('cost', valores.cost);
-          formData.append('type', valores.type);
+          formData.append("name", valores.name);
+          formData.append("description", valores.description);
+          formData.append("ingredients", valores.ingredients);
+          formData.append("tags", valores.tags);
+          formData.append("cost", valores.cost);
+          formData.append("type", valores.type);
           imageFile.forEach((file) => {
             formData.append("images", file);
           });
-          formData.append('authorRest', id);
-          console.log('Formulario enviado:', valores);
-          axios.post("http://localhost:3001/posts", formData)
+          formData.append("authorRest", id);
+          console.log("Formulario enviado:", valores);
+          axios
+            .post(
+              "https://pf-backend-production-83a4.up.railway.app/posts",
+              formData
+            )
             .then((response) => {
-              console.log('Datos enviados:', formData);
-              console.log('Respuesta del servidor:', response.data);
+              console.log("Datos enviados:", formData);
+              console.log("Respuesta del servidor:", response.data);
               resetForm();
               document.getElementById("image").value = null;
               setformSubmit(true);
               setTimeout(() => setformSubmit(false), 5000);
               const platoId = response.data._id;
-              console.log('Plato id:', platoId)
+              console.log("Plato id:", platoId);
 
-              axios.put(`http://localhost:3001/restaurants/${id}`, {
-                menu: platoId,
-              }, {
-                headers: {
-                  "Authorization": `Bearer ${token}`,
-                },
-              })
+              axios
+                .put(
+                  `https://pf-backend-production-83a4.up.railway.app/restaurants/${id}`,
+                  {
+                    menu: platoId,
+                  },
+                  {
+                    headers: {
+                      Authorization: `Bearer ${token}`,
+                    },
+                  }
+                )
                 .then((response) => {
-                  console.log('Actualización del menú exitosa:', response.data);
+                  console.log("Actualización del menú exitosa:", response.data);
                 })
                 .catch((error) => {
-                  console.error('Error al actualizar el menú:', error);
+                  console.error("Error al actualizar el menú:", error);
                 });
-
             })
             .catch((error) => {
               console.log(error);
-            })
+            });
         }}
       >
-        {({ values, errors, touched, handleSubmit, handleChange, handleBlur }) => (
+        {({
+          values,
+          errors,
+          touched,
+          handleSubmit,
+          handleChange,
+          handleBlur,
+        }) => (
           <form className={styles.formulario} onSubmit={handleSubmit}>
             <div>
               <label htmlFor="name">Nombre:</label>
               <input
-                type='text'
-                id='name'
-                name='name'
+                type="text"
+                id="name"
+                name="name"
                 placeholder="Nombre del plato..."
                 value={values.name}
                 onChange={handleChange}
                 onBlur={handleBlur}
               />
-              {touched.name && errors.name && <div className={styles.error}>{errors.name}</div>}
+              {touched.name && errors.name && (
+                <div className={styles.error}>{errors.name}</div>
+              )}
             </div>
             <div>
               <label htmlFor="description">Descripción:</label>
               <input
-                type='text'
-                id='description'
-                name='description'
+                type="text"
+                id="description"
+                name="description"
                 placeholder="Descripción del plato..."
                 value={values.description}
                 onChange={handleChange}
                 onBlur={handleBlur}
               />
-              {touched.description && errors.description && <div className={styles.error}>{errors.description}</div>}
+              {touched.description && errors.description && (
+                <div className={styles.error}>{errors.description}</div>
+              )}
             </div>
             <div>
               <label htmlFor="ingredients">Ingredientes:</label>
               <input
-                type='text'
-                id='ingredients'
-                name='ingredients'
+                type="text"
+                id="ingredients"
+                name="ingredients"
                 placeholder="Ingredientes..."
                 value={values.ingredients}
                 onChange={handleChange}
                 onBlur={handleBlur}
               />
-              {touched.ingredients && errors.ingredients && <div className={styles.error}>{errors.ingredients}</div>}
+              {touched.ingredients && errors.ingredients && (
+                <div className={styles.error}>{errors.ingredients}</div>
+              )}
             </div>
             <div>
               <label htmlFor="tags">Tags:</label>
@@ -177,33 +199,39 @@ export default function FormPlatos() {
                 <option value="Tematicas">Tematicas</option>
                 <option value="Otros">Otros</option>
               </select>
-              {touched.tags && errors.tags && <div className={styles.error}>{errors.tags}</div>}
+              {touched.tags && errors.tags && (
+                <div className={styles.error}>{errors.tags}</div>
+              )}
             </div>
             <div>
               <label htmlFor="cost">Costo:</label>
               <input
-                type='text'
-                id='cost'
-                name='cost'
+                type="text"
+                id="cost"
+                name="cost"
                 placeholder="Precio..."
                 value={values.cost}
                 onChange={handleChange}
                 onBlur={handleBlur}
               />
-              {touched.cost && errors.cost && <div className={styles.error}>{errors.cost}</div>}
+              {touched.cost && errors.cost && (
+                <div className={styles.error}>{errors.cost}</div>
+              )}
             </div>
             <div>
               <label htmlFor="type">Categoría:</label>
               <input
-                type='text'
-                id='type'
-                name='type'
+                type="text"
+                id="type"
+                name="type"
                 placeholder="(entrada, bebida, sandwich)"
                 value={values.type}
                 onChange={handleChange}
                 onBlur={handleBlur}
               />
-              {touched.type && errors.type && <div className={styles.error}>{errors.type}</div>}
+              {touched.type && errors.type && (
+                <div className={styles.error}>{errors.type}</div>
+              )}
             </div>
             <div>
               <label htmlFor="image">Imagen:</label>
@@ -214,10 +242,14 @@ export default function FormPlatos() {
                 multiple
                 onChange={(e) => handleImage(e.target.files)}
               />
-              {touched.image && errors.image && <div className={styles.error}>{errors.image}</div>}
+              {touched.image && errors.image && (
+                <div className={styles.error}>{errors.image}</div>
+              )}
             </div>
-            <button type='submit' >Enviar</button>
-            {formSubmit && <p className={styles.exito}>Carta de platos enviada con éxito!</p>}
+            <button type="submit">Enviar</button>
+            {formSubmit && (
+              <p className={styles.exito}>Carta de platos enviada con éxito!</p>
+            )}
           </form>
         )}
       </Formik>

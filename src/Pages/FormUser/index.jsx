@@ -1,22 +1,22 @@
-import { useState } from "react";
+import { Box, Button, Container, TextField } from "@mui/material";
 import axios from "axios";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { TextField, Box, Button, Container } from "@mui/material";
 
 export default function FormUser() {
   const objUser = JSON.parse(window.localStorage.getItem("UserVerificated"));
-  const redirect = window.localStorage.getItem("redirectPath")
-  const navigate = useNavigate()
+  const redirect = window.localStorage.getItem("redirectPath");
+  const navigate = useNavigate();
   const [user, setUser] = useState({
     name: objUser.nickname,
     email: objUser.email,
     city: "",
     address: "",
     country: "",
-    phone:"",
-    images:[objUser.picture],
+    phone: "",
+    images: [objUser.picture],
     type_customer: "User",
-    description:null,
+    description: null,
   });
 
   const [errors, setErrors] = useState({
@@ -25,15 +25,15 @@ export default function FormUser() {
     city: "Campo requerido",
     address: "Campo requerido",
     country: "Campo requerido",
-    phone:"",
+    phone: "",
     type_customer: "User",
-    description:null,
+    description: null,
   });
 
   function handleSubmit(event) {
     event.preventDefault();
     if (user.city && user.country && user.address && user.name && user.phone) {
-      const formData = new FormData();      
+      const formData = new FormData();
       formData.append("name", user.name);
       formData.append("email", user.email);
       formData.append("city", user.city);
@@ -44,7 +44,7 @@ export default function FormUser() {
       formData.append("type_customer", user.type_customer);
       axios
         .post(
-          "http://localhost:3001/users",
+          "https://pf-backend-production-83a4.up.railway.app/users",
           formData
         )
         .then((response) => {
@@ -63,7 +63,7 @@ export default function FormUser() {
             JSON.stringify(response.data)
           );
           window.localStorage.setItem("IsLogin", true);
-          navigate(redirect)
+          navigate(redirect);
         })
         .catch((error) => {
           console.log(error);
@@ -99,7 +99,7 @@ export default function FormUser() {
         validatePhoneNumber(value);
         break;
       case "name":
-        validateName(value)
+        validateName(value);
       default:
         break;
     }
@@ -107,9 +107,9 @@ export default function FormUser() {
 
   const validateName = (name) => {
     if (!/^[\p{L}\d\s.,;()']+$/u.test(name) || name.length < 3) {
-      setErrors({ ...errors, name: 'Nombre inválido' });
+      setErrors({ ...errors, name: "Nombre inválido" });
     } else {
-      setErrors({ ...errors, name: '' });
+      setErrors({ ...errors, name: "" });
     }
   };
 
@@ -181,7 +181,7 @@ export default function FormUser() {
                 onChange={handleChange}
                 autoComplete="off"
                 placeholder="Correo..."
-                disabled={true} 
+                disabled={true}
                 nputProps={{
                   readOnly: true,
                 }}

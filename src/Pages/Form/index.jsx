@@ -1,18 +1,24 @@
-import { useEffect, useState } from "react";
+import {
+  Box,
+  Button,
+  Container,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+} from "@mui/material";
 import axios from "axios";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 import styles from "./styles.module.css";
-import { Link, useNavigate } from 'react-router-dom';
-import { TextField, Box, Button, Container, Select, MenuItem, InputLabel } from "@mui/material";
-import { useDispatch ,useSelector} from "react-redux";
-import { PostRestaurant } from "../../Redux/actions";
 
 export default function Form() {
-  
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const objUser = JSON.parse(window.localStorage.getItem("UserVerificated"));
 
-  const [imagesFile, setImagesFile] = useState([])
+  const [imagesFile, setImagesFile] = useState([]);
   const [restorants, setRestorants] = useState({
     name: objUser.nickname,
     description: "",
@@ -20,37 +26,42 @@ export default function Form() {
     address: "",
     country: "",
     phoneNumber: "",
-    images:[],
+    images: [],
     type_customer: "Restaurant",
     tags: [],
     capacity: 0,
-    email:objUser.email,
+    email: objUser.email,
   });
 
-
   const [errors, setErrors] = useState({
-    name: 'Campo Requerido',
-    description: '',
+    name: "Campo Requerido",
+    description: "",
     city: "",
     country: "",
     address: "",
     phoneNumber: "",
-    capacity: '',
-    images: '',
+    capacity: "",
+    images: "",
     email: "",
-    images:""
+    images: "",
   });
 
   function handleImage(files) {
     const selectFiles = Array.from(files).slice(0, 3);
-    
+
     setImagesFile(selectFiles);
   }
-  
 
   function handleSubmit(event) {
     event.preventDefault();
-    if (restorants.name && restorants.city && restorants.country && restorants.address && restorants.description && restorants.capacity) {
+    if (
+      restorants.name &&
+      restorants.city &&
+      restorants.country &&
+      restorants.address &&
+      restorants.description &&
+      restorants.capacity
+    ) {
       const formData = new FormData();
       formData.append("name", restorants.name);
       formData.append("description", restorants.description);
@@ -60,21 +71,25 @@ export default function Form() {
       formData.append("phoneNumber", restorants.phoneNumber);
       formData.append("type_customer", "Restaurant");
       formData.append("email", restorants.email);
-      formData.append("capacity",Number(restorants.capacity) );
+      formData.append("capacity", Number(restorants.capacity));
       restorants.tags.forEach((tag) => {
         formData.append("tags", tag);
       });
       imagesFile.forEach((file) => {
         formData.append("images", file);
       });
-      axios.post("http://localhost:3001/restaurants", formData)
+      axios
+        .post(
+          "https://pf-backend-production-83a4.up.railway.app/restaurants",
+          formData
+        )
         .then((response) => {
-          console.log('Datos enviados:', formData);
-          console.log('Respuesta del servidor:',  response.data);
-          const{restaurant} = response.data
-          console.log(restaurant)
+          console.log("Datos enviados:", formData);
+          console.log("Respuesta del servidor:", response.data);
+          const { restaurant } = response.data;
+          console.log(restaurant);
           alert("Usuario creado");
-          
+
           setErrors({});
           setRestorants({
             description: "",
@@ -87,34 +102,31 @@ export default function Form() {
             tags: [],
             capacity: "",
           });
-          localStorage.setItem(
-            "UserLogVerificate",
-            JSON.stringify(restaurant)
-          );
+          localStorage.setItem("UserLogVerificate", JSON.stringify(restaurant));
           window.localStorage.setItem("IsLogin", true);
-          navigate("/restorant")
+          navigate("/restorant");
         })
         .catch((error) => {
           console.log(error);
           alert("Error al crear el usuario");
         });
-      
     } else {
-      alert('Información incompleta!');
+      alert("Información incompleta!");
     }
-  };
-
+  }
 
   const [tagValue, setTagValue] = useState("");
-  useEffect(()=>{console.log(restorants.tags)},[restorants])
+  useEffect(() => {
+    console.log(restorants.tags);
+  }, [restorants]);
   function handleTags(event) {
     event.preventDefault();
-    if (tagValue!== "") {
+    if (tagValue !== "") {
       setRestorants({
         ...restorants,
-        tags: [...restorants.tags, tagValue]
+        tags: [...restorants.tags, tagValue],
       });
-      setTagValue("")
+      setTagValue("");
     }
   }
 
@@ -123,95 +135,93 @@ export default function Form() {
     if (name !== "tags") {
       setRestorants({
         ...restorants,
-        [name]: value
-      })
-    };
-
+        [name]: value,
+      });
+    }
 
     switch (name) {
-      case 'name':
+      case "name":
         validateName(value);
         break;
-      case 'description':
+      case "description":
         validateDescription(value);
         break;
-      case 'capacity':
+      case "capacity":
         validateCapacity(value);
         break;
-      case 'city':
+      case "city":
         validateCity(value);
         break;
-      case 'address':
+      case "address":
         validateAddress(value);
         break;
-      case 'country':
+      case "country":
         validateCountry(value);
         break;
-      case 'phoneNumber':
+      case "phoneNumber":
         validatePhoneNumber(value);
         break;
-      case 'email':
+      case "email":
         validateEmail(value);
-        break
+        break;
       default:
         break;
     }
-
-  };
+  }
 
   const validateName = (name) => {
     if (!/^[\p{L}\d\s.,;()']+$/u.test(name) || name.length < 3) {
-      setErrors({ ...errors, name: 'Nombre inválido' });
+      setErrors({ ...errors, name: "Nombre inválido" });
     } else {
-      setErrors({ ...errors, name: '' });
+      setErrors({ ...errors, name: "" });
     }
   };
 
   const validateDescription = (description) => {
     if (!/^[\p{L}\d\s.,;()']+$/u.test(description) || description.length < 20) {
-      setErrors({ ...errors, description: 'Descripción inválida' });
+      setErrors({ ...errors, description: "Descripción inválida" });
     } else {
-      setErrors({ ...errors, description: '' });
+      setErrors({ ...errors, description: "" });
     }
   };
 
   const validateCapacity = (capacity) => {
     if (!/^[\p{L}\d\s.,;()']+$/u.test(capacity)) {
-      setErrors({ ...errors, capacity: 'Se requiere capacidad' });
+      setErrors({ ...errors, capacity: "Se requiere capacidad" });
     } else {
-      setErrors({ ...errors, capacity: '' });
+      setErrors({ ...errors, capacity: "" });
     }
   };
 
   const validateCity = (city) => {
     if (!/^[\p{L}\s.,;()']+$/u.test(city)) {
-      setErrors({ ...errors, city: 'Ciudad inválida' });
+      setErrors({ ...errors, city: "Ciudad inválida" });
     } else {
-      setErrors({ ...errors, city: '' });
+      setErrors({ ...errors, city: "" });
     }
   };
 
   const validateAddress = (address) => {
     if (!/^[\p{L}\d\s.,;()']+$/u.test(address)) {
-      setErrors({ ...errors, address: 'Dirección inválida' });
+      setErrors({ ...errors, address: "Dirección inválida" });
     } else {
-      setErrors({ ...errors, address: '' });
+      setErrors({ ...errors, address: "" });
     }
   };
 
   const validateCountry = (country) => {
     if (!/^[\p{L}\s.,;()']+$/u.test(country)) {
-      setErrors({ ...errors, country: 'País inválido' });
+      setErrors({ ...errors, country: "País inválido" });
     } else {
-      setErrors({ ...errors, country: '' });
+      setErrors({ ...errors, country: "" });
     }
   };
 
   const validatePhoneNumber = (phoneNumber) => {
     if (!/^[\d\-()\s]+$/.test(phoneNumber)) {
-      setErrors({ ...errors, phoneNumber: 'Número de teléfono inválido' });
+      setErrors({ ...errors, phoneNumber: "Número de teléfono inválido" });
     } else {
-      setErrors({ ...errors, phoneNumber: '' });
+      setErrors({ ...errors, phoneNumber: "" });
     }
   };
 
@@ -219,9 +229,9 @@ export default function Form() {
     const emailRegex = /^[\w.-]+@[a-zA-Z_-]+?\.[a-zA-Z]{2,3}$/;
 
     if (!emailRegex.test(email)) {
-      setErrors({ ...errors, email: 'Correo electrónico inválido' });
+      setErrors({ ...errors, email: "Correo electrónico inválido" });
     } else {
-      setErrors({ ...errors, email: '' });
+      setErrors({ ...errors, email: "" });
     }
   };
 
@@ -235,15 +245,15 @@ export default function Form() {
 
   function isFormValid() {
     return (
-      errors.name === '' &&
-      errors.description === '' &&
-      errors.city === '' &&
-      errors.country === '' &&
-      errors.address === '' &&
-      errors.phoneNumber === '' &&
-      errors.capacity === '' &&
-      errors.images === '' &&
-      errors.email === ''
+      errors.name === "" &&
+      errors.description === "" &&
+      errors.city === "" &&
+      errors.country === "" &&
+      errors.address === "" &&
+      errors.phoneNumber === "" &&
+      errors.capacity === "" &&
+      errors.images === "" &&
+      errors.email === ""
     );
   }
 
@@ -251,13 +261,13 @@ export default function Form() {
     <>
       <Box display="flex" justifyContent="flex-start" mb={2}>
         <Box mr={2} mt={2} mb={2}>
-          <Link to="/home" style={{ textDecoration: 'none' }}>
+          <Link to="/home" style={{ textDecoration: "none" }}>
             <Button variant="contained">Volver</Button>
           </Link>
         </Box>
       </Box>
-      <Container className='boxForm' maxWidth="sm">
-        <Box display="flex" flexDirection="column" >
+      <Container className="boxForm" maxWidth="sm">
+        <Box display="flex" flexDirection="column">
           <form onSubmit={handleSubmit}>
             <Box display="flex" flexDirection="column" gap={2}>
               <TextField
@@ -315,7 +325,7 @@ export default function Form() {
                 error={errors.phoneNumber !== ""}
                 helperText={errors.phoneNumber !== "" ? errors.phoneNumber : ""}
               />
-               <TextField
+              <TextField
                 label="Correo"
                 variant="outlined"
                 name="email"
@@ -323,7 +333,7 @@ export default function Form() {
                 onChange={handleChange}
                 autoComplete="off"
                 placeholder="Correo..."
-                disabled={true} 
+                disabled={true}
                 nputProps={{
                   readOnly: true,
                 }}
@@ -368,7 +378,6 @@ export default function Form() {
                 <MenuItem value="Chicken">Chicken</MenuItem>
                 <MenuItem value="Pasta">Pasta</MenuItem>
                 <MenuItem value="Otros">Otros</MenuItem>
-
               </Select>
               <Button
                 variant="contained"

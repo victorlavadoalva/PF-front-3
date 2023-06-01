@@ -1,8 +1,8 @@
 import { Box, Paper, Typography } from "@mui/material";
 import PedidosCliente from "../../Components/PedidosCliente";
 // import { pedidosClienteRows } from "../../dataHardcodeo/constants";
-import { useEffect, useState } from "react";
 import axios from "axios";
+import { useEffect, useState } from "react";
 
 // import styles from "./styles.module.css";
 
@@ -11,19 +11,21 @@ export const Transactions = ({ restId }) => {
 
   useEffect(() => {
     const fetchPedidosCliente = async () => {
-        try {
-            const { data } = await axios.get(`http://localhost:3001/users/transactions/${restId}`);
-            setPedidoRows(data);
-        } catch (error) {
-            console.error("Error al obtener los pedidos:", error);
-        }
+      try {
+        const { data } = await axios.get(
+          `https://pf-backend-production-83a4.up.railway.app/users/transactions/${restId}`
+        );
+        setPedidoRows(data);
+      } catch (error) {
+        console.error("Error al obtener los pedidos:", error);
+      }
     };
 
     fetchPedidosCliente();
   }, [restId]);
-    
+
   return (
-    <Box >
+    <Box>
       <Box
         sx={{
           "& > :not(style)": {
@@ -39,7 +41,7 @@ export const Transactions = ({ restId }) => {
           </Typography>
           <PedidosCliente rows={pedidoRows} />
         </Paper>
-      </Box> 
+      </Box>
     </Box>
   );
 };

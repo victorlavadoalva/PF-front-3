@@ -54,7 +54,7 @@ const ReservasCliente = () => {
       const parsedData = JSON.parse(storedData);
       const idUser = parsedData.id;
       const url = "https://pf-backend-production-83a4.up.railway.app";
-      const url2 = "http://localhost:3001";
+      const url2 = "https://pf-backend-production-83a4.up.railway.app";
 
       const reservation = {
         ...values,
