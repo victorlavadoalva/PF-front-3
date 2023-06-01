@@ -77,7 +77,8 @@ const ReservasCliente = () => {
           alert("Se agendo la cita con exito!");
         })
         .catch((error) => {
-          console.log(error);
+          alert("Debe iniciar sesion para realizar una reserva!");
+          console.log("error");
         });
     } else {
       // Si no se encontraron datos en el Local Storage, manejar la situación en consecuencia
