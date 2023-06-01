@@ -134,7 +134,7 @@ export default function PrimarySearchAppBar() {
           <Box sx={{ flexGrow: 1 }} />
           {
             !isRestorant &&
-            <Link to="/home/cart" target="_blank" rel="noopener noreferrer">
+            <Link to="/home/cart"  rel="noopener noreferrer">
               <IconButton>
                 <ShoppingCartIcon />
               </IconButton>

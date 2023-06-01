@@ -19,12 +19,14 @@
   order: 1;
   align-items: center;
   justify-content: center;
-  margin: 15px 0 0 0;
+  margin: 15px 0 5px 0;
   height: 75%;
+  width: 10vh;
 }
 
 .imgContainer img {
-  height: 9rem;
+  height: 9.5rem;
+  width: 17rem;
   border-radius: 12%;
 }
 
@@ -32,6 +34,7 @@
   /* border:1px solid black; */
   display: flex;
   justify-content: flex-start;
+  color:white;
   order: 2;
   width: 70%;
   height: 10%;

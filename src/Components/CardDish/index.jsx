@@ -121,12 +121,6 @@ export const CardDish = ({
         </CardActions>
       )}
       {
-        isRestorant &&
-        <IconButton edge="end" aria-label="delete" onClick={() => editMenu(id)}>
-          <EditIcon />
-        </IconButton>
-      }
-      {
         isRestorant && (isActive ? (
           <IconButton edge="end" aria-label="delete" onClick={() => removeFromMenu(id)}>
             <RemoveIcon />

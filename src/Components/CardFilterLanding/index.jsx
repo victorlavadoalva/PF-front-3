@@ -9,7 +9,12 @@ export default function CardFilter_Landing({ id, image, name }) {
     >
       <div className={styles.cardContainer}>
         <div className={styles.imgContainer}>
+          {image[0] ? (
           <img src={image[0]} alt={name} />
+          ) : (
+          <p style ={{color:"white"}}>Image not found</p>
+          )}
+          
         </div>
         <div className={styles.containerTitle}>
           <h3>{name}</h3>

@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import Cart from '../../Components/Cart';
 import PaginationRounded from "../../Components/Paginado";
 import { getRestorants } from "../../Redux/actions";
 import styles from "./styles.module.css";
-import Cart from '../../Components/Cart';
 
 export default function MenuCliente() {
 

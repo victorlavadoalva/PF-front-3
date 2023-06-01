@@ -17,9 +17,10 @@ import {
   GET_USER_EMAIL,
   LOADING,
   POST_USER,
+  RESET_DETAIL,
   UPDATE_SUCCESS,
   UPDATE_USER,
-  USER_REGISTER,
+  USER_REGISTER
 } from "./actionsTypes";
 
 //const token = process.env.GET_TOKEN;
@@ -28,27 +29,27 @@ import {
 //const GET_URL_TOKEN = `https://pf-backend-production-83a4.up.railway.app/${token}`;
 //const URL_POST = "​https://pf-backend-production-83a4.up.railway.app/posts";
 
-const URL_RESTAURANT =
-  "https://pf-backend-production-83a4.up.railway.app/restaurants";
-const URL_USERS = "https://pf-backend-production-83a4.up.railway.app/users";
-const backendUrl = "https://pf-backend-production-83a4.up.railway.app";
-const userLocal = backendUrl + "/users";
-const restaurantLocal = backendUrl + "/restaurants";
+const URL_RESTAURANT = "http://localhost:3001/restaurants";
+const URL_USERS = "http://localhost:3001/users";
+const backendUrl = "http://localhost:3001";
+const userLocal = backendUrl + "/users"
+const restaurantLocal = backendUrl + "/restaurants"
 
 export const getRestorants = ({
   page = 1,
   order,
   rating,
   name,
-  country,
+  city,
   stringTag,
 }) => {
   return async function (dispatch) {
     try {
+      console.log('city:',city)
       const { data } = await axios(restaurantLocal, {
-        params: { page, order, rating, name, country, tag: stringTag },
+        params: { page, order, rating, name, city, tag : stringTag  },
       });
-      console.log("Server Response:", data);
+      console.log('Server Response:', data);
       return (
         dispatch({ type: GET_ALL_RESTORANTS, payload: data[0] }),
         dispatch({ type: GET_AMOUNTPAGES, payload: data[0].totalPages })
@@ -56,7 +57,7 @@ export const getRestorants = ({
     } catch (error) {
       return dispatch({
         type: ERROR,
-        payload: [{ error }, "ErrorGetRestorant"],
+        payload: [{ error }, "ErrorGetRestorant"]
       });
     }
   };
@@ -69,8 +70,8 @@ export const getRestorantFilter = (tag) => {
       const { data } = await axios(restaurantLocal, {
         params: { tag },
       });
-      return dispatch({ type: FILTER_LANDING, payload: data[0].documents });
-    } catch (error) {}
+      return dispatch({ type: FILTER_LANDING, payload: data[0].documents  });
+    } catch (error) { }
   };
 };
 
@@ -79,7 +80,6 @@ export const getDish = (id) => {
     try {
       const response = await axios(URL_RESTAURANT + "/" + id);
       const { menu } = response.data;
-      console.log(menu);
       console.log("response menu:", JSON.stringify(menu));
       return dispatch({ type: GET_DISH, payload: menu });
     } catch (error) {
@@ -94,9 +94,7 @@ export const GetUserEmail = ({ saveEmail }) => {
       console.log(saveEmail);
       const response_user = await axios.get(userLocal + `?email=${saveEmail}`);
       console.log(response_user);
-      const response_restaurant = await axios.get(
-        restaurantLocal + `?email=${saveEmail}`
-      );
+      const response_restaurant = await axios.get(restaurantLocal + `?email=${saveEmail}`);
       const dataUser = response_user.data;
       const dataRestaurant = response_restaurant.data;
       if (dataUser) {
@@ -112,7 +110,7 @@ export const GetUserEmail = ({ saveEmail }) => {
     } catch (error) {
       return dispatch({
         type: ERROR,
-        payload: [{ error }, "ErrorPostUser"],
+        payload: [{ error }, "ErrorPostUser"]
       });
     }
   };
@@ -128,7 +126,7 @@ export const GetTokenLogin = (typeUser, email) => {
         console.log(data);
         return dispatch({ type: GET_TOKEN, payload: [true, data] });
       } else if (typeUser === "Restaurant") {
-        console.log("!!!!!!!!ActionsToken ,Restaurant", email);
+        console.log("!!!!!!!!ActionsToken ,Restaurant", email)
         const { data } = await axios.get(restaurantLocal + `/login/${email}`);
         localStorage.setItem("access_token", data.token);
 
@@ -219,7 +217,7 @@ export const updateAccount = (userId, userData) => {
           phone: userData.phone,
           address: userData.address,
           city: userData.city,
-          country: userData.country,
+          country: userData.country
         },
         {
           headers: {
@@ -276,11 +274,13 @@ export const deleteCart = () => {
   };
 };
 
+
+
 export const Register = (user) => {
   return async function (dispatch) {
     return dispatch({
       type: USER_REGISTER,
-      payload: user,
+      payload: user
     });
   };
 };
@@ -288,14 +288,12 @@ export const Register = (user) => {
 export const getReservs = (restoId) => {
   return async function (dispatch) {
     try {
-      const response = await axios.get(
-        `https://pf-backend-production-83a4.up.railway.app/restorant/${restoId}`
-      );
-      const data = response.data;
+      const response = await axios.get(`http://localhost:3001/restaurants/${restoId}`);
+      const data = response.data.reservations;
       return dispatch({
         type: GET_RESERVS,
-        payload: data,
-      });
+        payload: data
+      })
     } catch (error) {
       return dispatch({ type: ERROR, payload: error });
     }
@@ -305,16 +303,24 @@ export const getReservs = (restoId) => {
 export const getOrders = (restoId) => {
   return async function (dispatch) {
     try {
-      const response = await axios.get(
-        `https://pf-backend-production-83a4.up.railway.app/restorant/${restoId}`
-      );
+      const response = await axios.get(`https://pf-backend-production-83a4.up.railway.app/restorant/${restoId}`);
       const data = response.data;
       return dispatch({
         type: GET_ORDERS,
-        payload: data,
-      });
+        payload: data
+      })
     } catch (error) {
       return dispatch({ type: ERROR, payload: error });
     }
+  };
+};
+
+
+export const resetDetail = () => {
+  return async function (dispatch) {
+    return dispatch({
+      type: RESET_DETAIL,
+      payload: []
+    });
   };
 };

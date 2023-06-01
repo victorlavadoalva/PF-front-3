@@ -20,6 +20,7 @@ const UPDATE_USER = "UPDATE_USER"
 const USER_REGISTER = "USER_REGISTER"
 const GET_RESERVS = "GET_RESERVS"
 const GET_ORDERS = "GET_ORDERS"
+const RESET_DETAIL = "RESET_DETAIL"
 
 module.exports = {
     GET_ALL_RESTORANTS,
@@ -44,4 +45,5 @@ module.exports = {
     USER_REGISTER,
     GET_RESERVS,
     GET_ORDERS,
+    RESET_DETAIL
 }

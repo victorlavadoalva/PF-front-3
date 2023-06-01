@@ -200,7 +200,7 @@ export default function CuentaCliente({ userId, userData }) {
             )} */}
           </Paper>
         </Box>
-        <Transactions />
+        {/* <Transactions /> */}
         {/* ver si se le va a dar funcionalidad a las Reservations */}
         {/* <Reservations /> */}
       </Box>

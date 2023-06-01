@@ -160,12 +160,12 @@ export const RESTOS = [
 ];
 export const LOCATION = [
   {
-    id: 1,
-    name: "Bs As",
+    id: "Bogota",
+    name: "Bogota",
   },
   {
-    id: 2,
-    name: "Córdoba",
+    id: 'Cosquin',
+    name: "Cosquin",
   },
   {
     id: 3,
@@ -375,8 +375,8 @@ export const reservasColumns = [
     editable: true,
   },
   {
-    field: "phone",
-    headerName: "Telefono",
+    field: "email",
+    headerName: "Email",
     type: "string",
     width: 150,
     editable: true,

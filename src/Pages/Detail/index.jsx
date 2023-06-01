@@ -4,7 +4,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { useNavigate, useParams } from "react-router-dom";
-import { getRestorantsID } from "../../Redux/actions";
+import { getRestorantsID , resetDetail} from "../../Redux/actions";
 import styles from "./styles.module.css";
 import { Carousel } from "react-responsive-carousel";
 import Typography from "@mui/material/Typography";
@@ -13,6 +13,7 @@ import BasicButtons from "../../Components/Button";
 import { useLocation, Outlet } from "react-router-dom";
 import Review from '../../Components/Review';
 import MapDetail from "../../Components/MapDetail/MapDetail";
+import Loading_Login from "../../View/Loading";
 
 function Detail() {
   const location = useLocation();
@@ -23,9 +24,14 @@ function Detail() {
   useEffect(() => {
     console.log("restoId:", restoId);
     if (restoId) dispatch(getRestorantsID(restoId));
+    
+    return () => {
+      dispatch(resetDetail());
+    };
   }, [dispatch, restoId]);
 
   const restaurant = useSelector((state) => state.RestaurantID);
+  console.log('restaurant:',restaurant)
   
 
   // Convertir restoId a número
@@ -33,11 +39,14 @@ function Detail() {
 
   // Encontrar el objeto del restaurante basado en restoIdNumber
   // const resto = RESTOS.find((resto) => resto.id === restoIdNumber);
-
+console.log(restaurant);
   return (
     <>
-{location.pathname === `/home/detail/${restoId}` && 
-<div className={styles.detail}>
+{location.pathname === `/home/detail/${restoId}` && (
+
+
+Object.keys(restaurant).length > 0 ? (
+  <div className={styles.detail}>
       <div>
         <Typography component="h2" variant="h2" style={{ marginBottom: "8px" }}>
           {restaurant.name}
@@ -80,10 +89,7 @@ function Detail() {
           Descripción: {restaurant.description}
         </Typography>
         {/* <Typography component="p" style={{ marginBottom: '8px' }}>Tags: {restaurant.tags}</Typography> */}
-        <Typography component="p" style={{ marginBottom: "8px" }}>
-          Calificación
-        </Typography>
-        <Rating name="read-only" defaultValue={restaurant.rating} readOnly />
+        
       </div>
       <div>
       <MapDetail restaurant={restaurant}/>
@@ -98,6 +104,10 @@ function Detail() {
       </div>
       <Review restoId={restoId}></Review>
     </div>
+) : (
+  <Loading_Login/>
+)
+)
 }
     
   
