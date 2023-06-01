@@ -1,0 +1,46 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.column {
+  flex-basis: 50%; /* Ocupa el 50% del ancho del contenedor */
+  text-align: center;
+}
+
+.title {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.team {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Dos columnas de igual tamaño */
+  grid-template-rows: repeat(2, 1fr); /* Dos filas de igual tamaño */
+  justify-items: center; /* Centrar horizontalmente el contenido */
+  align-items: center; /* Centrar verticalmente el contenido */
+  gap: 20px; /* Espacio entre las cajas de contenido */
+}
+
+.integrante {
+  display: flex;
+  flex-direction: column; /* Los elementos se colocarán uno debajo del otro */
+  justify-content: center;
+  padding: 20px;
+}
+
+.integrante img {
+  margin-bottom: 10px; /* Separación de 10px en la parte inferior de la imagen */
+}
+
+.integrante h4 {
+  margin-bottom: 10px; /* Separación de 10px en la parte inferior del texto */
+}
+
+.integrante a {
+  margin-bottom: 10px; /* Separación de 10px en la parte inferior del enlace */
+}
